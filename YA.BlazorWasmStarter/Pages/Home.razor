@@ -4,82 +4,84 @@
 @inject IToastService ToastService
 
 <PageTitle>Home</PageTitle>
-<div class="card ">
-    <div class="card-header">💾 Generate Password</div>
-    <div class="card-body">
 
-        <div class="input-group mb-3">
-            <input @bind="password" readonly="readonly" type="text" class="form-control">
-            <span class="input-group-text my-clickable-button @onHoverCopyCss"
-                  @onmouseenter="@(()=> OnEmojiHover("copy"))"
-                  @onmouseleave="@OnEmojiMouseLeave" id="basic-addon1">📄</span>
-            <span class="input-group-text my-clickable-button @onHoverGenerateCss"
-                  @onclick="HandleGeneratePasswordClick"
-                  @onmouseenter="@(()=> OnEmojiHover("generate"))"
-                  @onmouseleave="@OnEmojiMouseLeave" id="basic-addon2">🔄</span>
-            <span class="input-group-text my-clickable-button @onHoverSaveCss"
-                  @onclick="HandleSavePasswordClick"
-                  @onmouseenter="@(()=> OnEmojiHover("save"))"
-                  @onmouseleave="@OnEmojiMouseLeave" id="basic-addon3">💾</span>
-        </div>
-
-        <div class="mb-3">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @bind="@includeNumbers"
-                    @oninput="@((args)=>HandleCheckBoxOnChange(args, CheckBoxActionType.Numbers))">
-                <label class="form-check-label" for="inlineCheckbox1">Numbers</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" @bind="@includeLowercase"
-                       @oninput="@((args)=>HandleCheckBoxOnChange(args, CheckBoxActionType.Lowercase))">
-                <label class="form-check-label" for="inlineCheckbox2">LowerCase</label>
-            </div>
-             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" @bind="@includeUppercase"
-                       @oninput="@((args)=>HandleCheckBoxOnChange(args, CheckBoxActionType.Uppercase))">
-                <label class="form-check-label" for="inlineCheckbox3">UpperCase</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="inlineCheckbox4" @bind="@includeSpecialChars"
-                       @oninput="@((args)=>HandleCheckBoxOnChange(args, CheckBoxActionType.SpecialChars))">
-                <label class="form-check-label" for="inlineCheckbox4">Special Chars</label>
-            </div>
-        </div>
-
-        <div class="container mt-4">
-            <h5 class="mb-3">Password Length</h5>
-            <div class="row align-items-center">
-                <div class="col-md-2 mb-2 mb-md-0">
-                    <input @bind=@passwordLength type="number" class="form-control" min="6" max="50" @oninput="HandlePasswordLengthInputOnChange" />
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="card col-8">
+            <div class="card-header text-center">💾 Generate Password</div>
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <input @bind="password" readonly="readonly" type="text" class="form-control text-center">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" @onmouseenter="@(()=> OnEmojiHover("copy"))" @onmouseleave="@OnEmojiMouseLeave">📄</button>
+                        <button class="btn btn-outline-secondary" type="button" @onclick="HandleGeneratePasswordClick" @onmouseenter="@(()=> OnEmojiHover("generate"))" @onmouseleave="@OnEmojiMouseLeave">🔄</button>
+                        <button class="btn btn-outline-secondary" type="button" @onclick="HandleSavePasswordClick" @onmouseenter="@(()=> OnEmojiHover("save"))" @onmouseleave="@OnEmojiMouseLeave">💾</button>
+                    </div>
                 </div>
-                <div class="col-md-8 mb-2 mb-md-0">
-                    <input type="range" class="form-range" step="1" min="6" max="50" @bind="passwordLength" @oninput="HandleRangeOnChange" />
+
+                <div class="mb-3 text-center">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @bind="@includeNumbers" @oninput="@((args)=>HandleCheckBoxOnChange(args, CheckBoxActionType.Numbers))">
+                        <label class="form-check-label" for="inlineCheckbox1">Numbers</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" @bind="@includeLowercase" @oninput="@((args)=>HandleCheckBoxOnChange(args, CheckBoxActionType.Lowercase))">
+                        <label class="form-check-label" for="inlineCheckbox2">LowerCase</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" @bind="@includeUppercase" @oninput="@((args)=>HandleCheckBoxOnChange(args, CheckBoxActionType.Uppercase))">
+                        <label class="form-check-label" for="inlineCheckbox3">UpperCase</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox4" @bind="@includeSpecialChars" @oninput="@((args)=>HandleCheckBoxOnChange(args, CheckBoxActionType.SpecialChars))">
+                        <label class="form-check-label" for="inlineCheckbox4">Special Chars</label>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <span class="badge bg-primary fs-6">@passwordLength characters</span>
+
+                <div class="container mt-4">
+                    <h5 class="mb-3 text-center">Password Length</h5>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-auto">
+                            <input @bind=@passwordLength type="number" class="form-control text-center" min="6" max="50" @oninput="HandlePasswordLengthInputOnChange" />
+                        </div>
+                        <div class="col-8">
+                            <input type="range" class="form-range" step="1" min="6" max="50" @bind="passwordLength" @oninput="HandleRangeOnChange" />
+                        </div>
+                        <div class="col-auto">
+                            <span class="badge badge-primary">@passwordLength characters</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-    </div>
-</div>
-
-<div class="card ">
-    <div class="card-header">
-        <MaterialSaveIcon OnClick="@HandleSaveIconClick"
-            Width="3" 
-            Height="3" 
-            ColorCode="#03346E" 
-            UnitType="CssUnitType.Rem" 
-            CssStyle="cursor:pointer;" /> Save Password
-    </div>
-    <div class="card-body">
-        <ul class="list-group mt-3">
-            @foreach (var item in savePasswords.Reverse())
-            {
-                <li class="list-group-item">@item</li>
-            }
-        </ul>
+        <div class="row justify-content-md-center">
+            <div class="card col-8 mt-3">
+                <div class="card-header text-center">
+                    💾 Save Password
+                </div>
+                <div class="card-body">
+                    @if (savePasswords.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (string savePassword in savePasswords.Reverse())
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>@savePassword</span>
+                                    <button @onclick="() => DeletePassword(savePassword)" class="btn btn-danger">
+                                        🗑 Delete
+                                    </button>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-center">No saved passwords found.</p>
+                    }
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -146,7 +148,7 @@
 
         passwordLength = Convert.ToInt32(args.Value);
 
-        GeneratePassword();        
+        GeneratePassword();
     }
 
     private void HandleCheckBoxOnChange(ChangeEventArgs args, CheckBoxActionType actionType)
@@ -169,6 +171,14 @@
     private void HandleGeneratePasswordClick()
     {
         GeneratePassword();
+    }
+
+    private void DeletePassword(string selectedPassword)
+    {
+        if (savePasswords.Contains(selectedPassword))
+            savePasswords.Remove(selectedPassword);
+
+        ToastService.ShowInfo("Password deleted..");
     }
 
     private void GeneratePassword()
