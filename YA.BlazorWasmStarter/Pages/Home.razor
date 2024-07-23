@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using System.Text
-@using YA.BlazorWasmStarter.Enums
+@inject NavigationManager Navigation
+@inject IToastService ToastService
 
 <PageTitle>Home</PageTitle>
 <div class="card ">
@@ -45,20 +46,36 @@
             </div>
         </div>
 
-        <div>
-            <p class="mb-1 mt-3">Password Length: <b>@passwordLength</b></p>
-
-            <input type="range" class="form-range" step="1" min="8" max="50" @bind="passwordLength" @bind:event="oninput" />
+        <div class="container mt-4">
+            <h5 class="mb-3">Password Length</h5>
+            <div class="row align-items-center">
+                <div class="col-md-2 mb-2 mb-md-0">
+                    <input @bind=@passwordLength type="number" class="form-control" min="6" max="50" @oninput="HandlePasswordLengthInputOnChange" />
+                </div>
+                <div class="col-md-8 mb-2 mb-md-0">
+                    <input type="range" class="form-range" step="1" min="6" max="50" @bind="passwordLength" @oninput="HandleRangeOnChange" />
+                </div>
+                <div class="col-md-2">
+                    <span class="badge bg-primary fs-6">@passwordLength characters</span>
+                </div>
+            </div>
         </div>
 
     </div>
 </div>
 
 <div class="card ">
-    <div class="card-header">💾 Save Password</div>
+    <div class="card-header">
+        <MaterialSaveIcon OnClick="@HandleSaveIconClick"
+            Width="3" 
+            Height="3" 
+            ColorCode="#03346E" 
+            UnitType="CssUnitType.Rem" 
+            CssStyle="cursor:pointer;" /> Save Password
+    </div>
     <div class="card-body">
         <ul class="list-group mt-3">
-            @foreach (var item in savePasswords)
+            @foreach (var item in savePasswords.Reverse())
             {
                 <li class="list-group-item">@item</li>
             }
@@ -75,7 +92,7 @@
 
     private static Random random = new Random();
     private static StringBuilder stringBuilder = new StringBuilder();
-    private List<string> savePasswords = ["cengizilkerli", "semailkerli"];
+    private HashSet<string> savePasswords = [];
 
     private const string lowercaseLetters = "abcdefghijklmnopqrstuvwxyz";
     private const string uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -110,6 +127,26 @@
         onHoverCopyCss = string.Empty;
         onHoverGenerateCss = string.Empty;
         onHoverSaveCss = string.Empty;
+    }
+
+    private void HandleRangeOnChange(ChangeEventArgs args)
+    {
+        if (args.Value is null)
+            return;
+
+        passwordLength = Convert.ToInt32(args.Value);
+
+        GeneratePassword();
+    }
+
+    private void HandlePasswordLengthInputOnChange(ChangeEventArgs args)
+    {
+        if (args.Value is null)
+            return;
+
+        passwordLength = Convert.ToInt32(args.Value);
+
+        GeneratePassword();        
     }
 
     private void HandleCheckBoxOnChange(ChangeEventArgs args, CheckBoxActionType actionType)
@@ -174,6 +211,13 @@
             return;
 
         savePasswords.Add(password);
+
+        ToastService.ShowInfo("The selected password saved !");
+    }
+
+    private void HandleSaveIconClick()
+    {
+        Navigation.NavigateTo("counter");
     }
 
     protected override void OnInitialized()
