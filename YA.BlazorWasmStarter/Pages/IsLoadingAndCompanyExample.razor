@@ -1,0 +1,47 @@
+﻿@page "/isloading-and-company-example"
+@using YA.BlazorWasmStarter.Components
+
+<PageTitle>Home</PageTitle>
+
+<button class="btn btn-success mb-3" @onmouseenter="@HandleChangeLoadingButtonMouseEnter" @onclick="@HandleChangeLoadingButtonClick">Change Loading</button>
+
+<h2 class="@(isCompany ? "text-info" : "text-danger")">Vergi Kimlik No</h2>
+
+@if (isLoading)
+{
+    <h2>Loading... 🔥</h2>
+}
+else
+{
+    <h1>@username.ToLowerInvariant()</h1>
+}
+
+@if (isCompany)
+{
+    <h2 class="text-info">Vergi Kimlik No</h2>
+}
+else
+{
+    <h2 class="text-danger">TC Kimlik No</h2>
+}
+
+<MyButton/>
+
+@code {
+
+    private string username = "Cengiz İlkerli";
+    private bool isLoading = false;
+    private bool isCompany = false;
+
+    private void HandleChangeLoadingButtonClick()
+    {
+        isLoading = !isLoading;
+        isCompany = !isCompany;
+    }
+
+    private void HandleChangeLoadingButtonMouseEnter()
+    {
+        isLoading = !isLoading;
+        isCompany = !isCompany;
+    }
+}
