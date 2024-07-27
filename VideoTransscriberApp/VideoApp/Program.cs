@@ -29,7 +29,7 @@ var sampleFile = await File.ReadAllBytesAsync(audioFilePath);
 
 var openAiService = new OpenAIService(new OpenAiOptions()
 {
-    ApiKey = "sk-proj-Mm1Vvk6Clqn90zs2J47PT3BlbkFJls4twvkKtXa2wREDNIYC"
+    ApiKey = "sk-xxx"
 
 });
 
