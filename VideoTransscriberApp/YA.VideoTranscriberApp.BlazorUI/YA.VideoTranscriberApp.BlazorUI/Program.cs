@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
+using Microsoft.AspNetCore.Http;
+using OpenAI.Extensions;
 using YA.VideoTranscriberApp.BlazorUI.Client.Pages;
 using YA.VideoTranscriberApp.BlazorUI.Components;
 
@@ -10,6 +13,16 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5170/api/") });
 builder.Services.AddControllers();
+
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+    policy.AllowAnyMethod()
+        .AllowCredentials()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true)));
+
+var openAIApiKey = builder.Configuration.GetSection("OpenAIApiKey").Value;
+
+builder.Services.AddOpenAIService(settings => settings.ApiKey = openAIApiKey);
 
 var app = builder.Build();
 
@@ -35,6 +48,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(YA.VideoTranscriberApp.BlazorUI.Client._Imports).Assembly);
 
+app.UseCors();
 app.MapControllers();
 
 app.Run();
