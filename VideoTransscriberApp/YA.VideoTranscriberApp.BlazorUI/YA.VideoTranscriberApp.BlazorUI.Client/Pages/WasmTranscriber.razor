@@ -1,6 +1,8 @@
-﻿@page "/wasm-transcriber"
+﻿@page "/wasm-transcribe"
 @using System.ComponentModel.DataAnnotations
+@using YA.VideoTranscriberApp.BlazorUI.Client.Enums
 @using YA.VideoTranscriberApp.BlazorUI.Client.Components
+@using YA.VideoTranscriberApp.BlazorUI.Client.Models
 @rendermode InteractiveWebAssembly
 
 @inject HttpClient HttpClient
@@ -38,15 +40,7 @@
                     <ValidationMessage For="@(() => model.VideoFile)" />
                 </div>
 
-                <DaisyButton Type="submit" Style="@Client.Enums.ButtonStyle.Secondary" Text="Upload to Transcribe" CssClass="w-full" IsDisabled="@(!model.IsFileSelected || IsUploading)"></DaisyButton>
-
-                <button type="submit" class="btn btn-primary w-full @(IsUploading ? "loading" : "")" disabled="@(!model.IsFileSelected || IsUploading)">
-                    @if (IsUploading)
-                    {
-                        <span class="loading loading-spinner"></span>
-                    }
-                    Upload and Transcribe
-                </button>
+                <DaisyButton IsDisabled="@(!model.IsFileSelected || IsUploading)" Type="submit" Style="@ButtonStyle.Info" Text="Upload and Transcribe" CssClass="w-full" />
             </EditForm>
 
             @if (!string.IsNullOrEmpty(ErrorMessage))
@@ -125,7 +119,7 @@
 
             if (response.IsSuccessStatusCode)
             {
-                //Transcriptions = await response.Content.ReadFromJsonAsync<List<TranscriptionModel>>() ?? [];
+                Transcriptions = await response.Content.ReadFromJsonAsync<List<TranscriptionModel>>() ?? [];
                 SuccessMessage = "Video uploaded and transcribed successfully!";
             }
             else
@@ -154,11 +148,5 @@
         public string[] SelectedLanguages { get; set; } = new string[Languages.Count + 1];
 
         public bool IsFileSelected { get; set; } = false;
-    }
-
-    public class TranscriptionModel
-    {
-        public string Language { get; set; }
-        public string Text { get; set; }
     }
 }

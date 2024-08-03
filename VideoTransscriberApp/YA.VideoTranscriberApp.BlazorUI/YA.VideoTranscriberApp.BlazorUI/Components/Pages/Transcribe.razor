@@ -5,7 +5,10 @@
 @using System.ComponentModel.DataAnnotations
 @using System.Text.Json
 @using YA.VideoTranscriberApp.BlazorUI.Client.Enums
-@using YA.VideoTranscriberApp.BlazorUI.Models
+@using YA.VideoTranscriberApp.BlazorUI.Client.Models
+@using YA.VideoTranscriberApp.BlazorUI.Services
+
+@inject TranscriptionManager TranscriptionManager
 
 @inject HttpClient HttpClient
 
@@ -38,10 +41,10 @@
                     <label class="label">
                         <span class="label-text">Choose a video file</span>
                     </label>
-                    <InputFile name="model.VideoFile" class="file-input file-input-bordered w-full max-w-xs" accept="video/*" />
+                    <InputFile name="model.VideoFile" class="file-input file-input-bordered w-full max-w-xs" accept="video/*"/>
                     <ValidationMessage For="@(() => model.VideoFile)" />
                 </div>
-
+                
                 <DaisyButton Type="submit" Style="@ButtonStyle.Success" Text="Upload and Transcribe" CssClass="w-full" />
             </EditForm>
 
@@ -67,15 +70,7 @@
     {
         <div class="mt-8">
             <h2 class="text-2xl font-bold mb-4">Transcriptions</h2>
-            @foreach (var transcription in Transcriptions)
-            {
-                <div class="card bg-base-100 shadow-xl mb-4">
-                    <div class="card-body">
-                        <h3 class="card-title">@transcription.Language</h3>
-                        <p>@transcription.Text</p>
-                    </div>
-                </div>
-            }
+            <TranslatedTranscribeTabs Tabs="Transcriptions" @rendermode="InteractiveWebAssembly"/>
         </div>
     }
 </div>
@@ -90,10 +85,55 @@
     private string SuccessMessage { get; set; } = string.Empty;
     private List<TranscriptionModel> Transcriptions { get; set; } = [];
 
+    // private async Task UploadVideo()
+    // {
+    //     Console.WriteLine(JsonSerializer.Serialize(model));
+
+    //     if (model.VideoFile is null || string.IsNullOrEmpty(model.VideoFile.FileName) || model.SelectedLanguages is null || !model.SelectedLanguages.Any())
+    //     {
+    //         ErrorMessage = "Please select a file and at least one language.";
+    //         return;
+    //     }
+
+    //     IsUploading = true;
+    //     ErrorMessage = string.Empty;
+    //     SuccessMessage = string.Empty;
+
+    //     try
+    //     {
+    //         var content = new MultipartFormDataContent();
+    //         var fileContent = new StreamContent(model.VideoFile.OpenReadStream());
+    //         content.Add(fileContent, "video", model.VideoFile.FileName);
+
+    //         foreach (var language in model.SelectedLanguages)
+    //         {
+    //             content.Add(new StringContent(language), "languages");
+    //         }
+
+    //         var response = await HttpClient.PostAsync("Videos/", content);
+
+    //         if (response.IsSuccessStatusCode)
+    //         {
+    //             Transcriptions = await response.Content.ReadFromJsonAsync<List<TranscriptionModel>>() ?? [];
+    //             SuccessMessage = "Video uploaded and transcribed successfully!";
+    //         }
+    //         else
+    //         {
+    //             ErrorMessage = $"Error: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}";
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         ErrorMessage = $"An error occurred: {ex.Message}";
+    //     }
+    //     finally
+    //     {
+    //         IsUploading = false;
+    //     }
+    // }
+
     private async Task UploadVideo()
     {
-        Console.WriteLine(JsonSerializer.Serialize(model));
-
         if (model.VideoFile is null || string.IsNullOrEmpty(model.VideoFile.FileName) || model.SelectedLanguages is null || !model.SelectedLanguages.Any())
         {
             ErrorMessage = "Please select a file and at least one language.";
@@ -106,26 +146,16 @@
 
         try
         {
-            var content = new MultipartFormDataContent();
-            var fileContent = new StreamContent(model.VideoFile.OpenReadStream());
-            content.Add(fileContent, "video", model.VideoFile.FileName);
+            var cts = new CancellationTokenSource();
 
-            foreach (var language in model.SelectedLanguages)
-            {
-                content.Add(new StringContent(language), "languages");
-            }
+            var request = VideoUploadModel.ToRequest(model);
 
-            var response = await HttpClient.PostAsync("Videos/", content);
+            var response = await TranscriptionManager.UploadAsync(request, cts.Token);
 
-            if (response.IsSuccessStatusCode)
-            {
-                Transcriptions = await response.Content.ReadFromJsonAsync<List<TranscriptionModel>>() ?? [];
-                SuccessMessage = "Video uploaded and transcribed successfully!";
-            }
-            else
-            {
-                ErrorMessage = $"Error: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}";
-            }
+            Transcriptions = response;
+
+            SuccessMessage = "Video uploaded and transcribed successfully!";
+
         }
         catch (Exception ex)
         {
@@ -146,5 +176,16 @@
 
         [Required(ErrorMessage = "Please select at least one language.")]
         public string[] SelectedLanguages { get; set; } = new string[25];
+
+        public static VideoUploadRequest ToRequest(VideoUploadModel model)
+        {
+            return new VideoUploadRequest
+            {
+                Video = model.VideoFile,
+                Languages = model.SelectedLanguages
+            };
+        }
     }
+
+
 }

@@ -1,10 +1,5 @@
-﻿<button 
-    @onclick="@(() => OnClick.InvokeAsync())"
-    type="@Type" 
-    class="@GetCssClass" 
-    style="@CssStyles" 
-    disabled="@(IsDisabled)" 
-    >
+﻿@using YA.VideoTranscriberApp.BlazorUI.Client.Enums
+<button type="@Type" class="@GetCssClass" style="@CssStyles" disabled="@(IsDisabled)" @onclick="@(() => OnClick.InvokeAsync())">
     @Text
 </button>
 

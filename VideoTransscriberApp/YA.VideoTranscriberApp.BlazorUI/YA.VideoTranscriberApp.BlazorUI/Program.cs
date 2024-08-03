@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using OpenAI.Extensions;
 using YA.VideoTranscriberApp.BlazorUI.Client.Pages;
 using YA.VideoTranscriberApp.BlazorUI.Components;
+using YA.VideoTranscriberApp.BlazorUI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://localhost:5170/api/") });
 builder.Services.AddControllers();
+builder.Services.AddScoped<TranscriptionManager>();
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
     policy.AllowAnyMethod()

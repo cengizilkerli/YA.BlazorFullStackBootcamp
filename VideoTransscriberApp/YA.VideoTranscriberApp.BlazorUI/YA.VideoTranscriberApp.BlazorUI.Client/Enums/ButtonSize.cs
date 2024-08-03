@@ -1,10 +1,9 @@
-﻿namespace YA.VideoTranscriberApp.BlazorUI.Client.Enums
+﻿namespace YA.VideoTranscriberApp.BlazorUI.Client.Enums;
+
+public enum ButtonSize
 {
-    public enum ButtonSize
-    {
-        ExtraSmall = 1,
-        Small = 2,
-        Medium = 3,
-        Large = 4
-    }
+    ExtraSmall = 1,
+    Small = 2,
+    Medium = 3,
+    Large = 4
 }
