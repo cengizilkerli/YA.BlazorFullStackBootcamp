@@ -17,6 +17,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YA.VideoTranscriberApp.Blaz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YA.BlazorGiftSuggestionApp", "YA.BlazorGiftSuggestionApp\YA.BlazorGiftSuggestionApp.csproj", "{BEA0FEB1-AEF9-4DFC-A29B-CFAAC8939F48}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PasswordStorageApp", "PasswordStorageApp", "{CA81C962-C2B5-4D1A-BCF5-F5F7F6BCAFCA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasswordStorageApp.BlazorClient", "PasswordStorageApp\PasswordStorageApp.BlazorClient\PasswordStorageApp.BlazorClient.csproj", "{00958184-26A8-4F13-966D-8E668DCCCCB7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasswordStorageApp.Domain", "PasswordStorageApp\PasswordStorageApp.Domain\PasswordStorageApp.Domain.csproj", "{ED3072C6-1AEE-4AD0-965E-8716E0C6085C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasswordStorageApp.WebAPI", "PasswordStorageApp\PasswordStorageApp.WebAPI\PasswordStorageApp.WebAPI.csproj", "{624A2B4F-B483-450E-8E92-EE27A160A62E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +55,18 @@ Global
 		{BEA0FEB1-AEF9-4DFC-A29B-CFAAC8939F48}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEA0FEB1-AEF9-4DFC-A29B-CFAAC8939F48}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEA0FEB1-AEF9-4DFC-A29B-CFAAC8939F48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00958184-26A8-4F13-966D-8E668DCCCCB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00958184-26A8-4F13-966D-8E668DCCCCB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00958184-26A8-4F13-966D-8E668DCCCCB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00958184-26A8-4F13-966D-8E668DCCCCB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED3072C6-1AEE-4AD0-965E-8716E0C6085C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED3072C6-1AEE-4AD0-965E-8716E0C6085C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED3072C6-1AEE-4AD0-965E-8716E0C6085C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED3072C6-1AEE-4AD0-965E-8716E0C6085C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{624A2B4F-B483-450E-8E92-EE27A160A62E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{624A2B4F-B483-450E-8E92-EE27A160A62E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{624A2B4F-B483-450E-8E92-EE27A160A62E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{624A2B4F-B483-450E-8E92-EE27A160A62E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +75,9 @@ Global
 		{054D1734-2B12-4BC1-9B42-977388D7F894} = {8C4C3C29-EA2A-4D82-84D7-611512C2E847}
 		{3612E894-C72C-4AE3-868B-3F3DAC5300BC} = {8C4C3C29-EA2A-4D82-84D7-611512C2E847}
 		{97C8DCAE-7827-427A-B322-6914BDA10D91} = {8C4C3C29-EA2A-4D82-84D7-611512C2E847}
+		{00958184-26A8-4F13-966D-8E668DCCCCB7} = {CA81C962-C2B5-4D1A-BCF5-F5F7F6BCAFCA}
+		{ED3072C6-1AEE-4AD0-965E-8716E0C6085C} = {CA81C962-C2B5-4D1A-BCF5-F5F7F6BCAFCA}
+		{624A2B4F-B483-450E-8E92-EE27A160A62E} = {CA81C962-C2B5-4D1A-BCF5-F5F7F6BCAFCA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {34DD5D46-A35F-4FFF-BED4-1D0057FD7720}
