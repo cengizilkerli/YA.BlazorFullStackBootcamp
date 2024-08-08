@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace PasswordStorageApp.WebAPI.Persistens.Migrations
+namespace PasswordStorageApp.WebAPI.Persistence.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration
@@ -22,7 +22,7 @@ namespace PasswordStorageApp.WebAPI.Persistens.Migrations
                     Password = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Type = table.Column<int>(type: "INTEGER", nullable: false, defaultValue: 1),
                     CreatedOn = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    MofifiedOn = table.Column<DateTimeOffset>(type: "TEXT", nullable: true)
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,7 +31,7 @@ namespace PasswordStorageApp.WebAPI.Persistens.Migrations
 
             migrationBuilder.InsertData(
                 table: "Account",
-                columns: new[] { "Id", "CreatedOn", "MofifiedOn", "Password", "Username" },
+                columns: new[] { "Id", "CreatedOn", "ModifiedOn", "Password", "Username" },
                 values: new object[,]
                 {
                     { new Guid("71f3d31c-d0ef-11ee-a506-0242ac120002"), new DateTimeOffset(new DateTime(2023, 3, 15, 9, 30, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)), null, "P@ssw0rd123!", "johndoe" },

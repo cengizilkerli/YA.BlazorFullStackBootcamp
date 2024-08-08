@@ -9,6 +9,6 @@ namespace PasswordStorageApp.Domain.Models
         public string Password { get; set; }
         public AccountType Type { get; set; }
         public DateTimeOffset CreatedOn { get; set; }
-        public DateTimeOffset? MofifiedOn { get; set; }
+        public DateTimeOffset? ModifiedOn { get; set; }
     }
 }

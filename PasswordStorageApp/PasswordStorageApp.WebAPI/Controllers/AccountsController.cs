@@ -23,8 +23,9 @@ namespace PasswordStorageApp.WebAPI.Controllers
                 await _dbContext
                     .Accounts
                     .AsNoTracking()
+                    .Select(ac => AccountGetAllDto.MapFromAccount(ac))
                     .ToListAsync(cancellationToken);
-
+                
             return Ok(accounts);
         }
 

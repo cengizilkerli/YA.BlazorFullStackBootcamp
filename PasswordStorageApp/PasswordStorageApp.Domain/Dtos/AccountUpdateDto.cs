@@ -14,7 +14,7 @@ public class AccountUpdateDto
         account.Username = Username;
         account.Password = Password;
         account.Type = Type;
-        account.MofifiedOn = DateTime.UtcNow;
+        account.ModifiedOn = DateTime.UtcNow;
 
         return account;
     }

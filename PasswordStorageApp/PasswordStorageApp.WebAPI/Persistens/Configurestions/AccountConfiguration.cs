@@ -32,7 +32,7 @@ namespace PasswordStorageApp.WebAPI.Persistens.Configurestions
             builder.Property(x => x.CreatedOn)
                 .IsRequired();
 
-            builder.Property(x => x.MofifiedOn)
+            builder.Property(x => x.ModifiedOn)
                 .IsRequired(false);
 
             builder.ToTable("Account");

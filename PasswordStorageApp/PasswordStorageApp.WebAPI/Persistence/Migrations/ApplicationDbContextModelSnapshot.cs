@@ -2,20 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PasswordStorageApp.WebAPI.Persistens.Contexts;
 
 #nullable disable
 
-namespace PasswordStorageApp.WebAPI.Persistens.Migrations
+namespace PasswordStorageApp.WebAPI.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240807112233_InitialCreate")]
-    partial class InitialCreate
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
@@ -29,7 +26,7 @@ namespace PasswordStorageApp.WebAPI.Persistens.Migrations
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset?>("MofifiedOn")
+                    b.Property<DateTimeOffset?>("ModifiedOn")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
