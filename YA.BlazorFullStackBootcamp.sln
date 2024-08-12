@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasswordStorageApp.Domain",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasswordStorageApp.WebAPI", "PasswordStorageApp\PasswordStorageApp.WebAPI\PasswordStorageApp.WebAPI.csproj", "{624A2B4F-B483-450E-8E92-EE27A160A62E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorMAUI.GiftSuggestion", "BlazorMAUI.GiftSuggestion\BlazorMAUI.GiftSuggestion.csproj", "{3A262A2D-4847-42D8-8F90-BC9E14955266}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,12 @@ Global
 		{624A2B4F-B483-450E-8E92-EE27A160A62E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{624A2B4F-B483-450E-8E92-EE27A160A62E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{624A2B4F-B483-450E-8E92-EE27A160A62E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A262A2D-4847-42D8-8F90-BC9E14955266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A262A2D-4847-42D8-8F90-BC9E14955266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A262A2D-4847-42D8-8F90-BC9E14955266}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3A262A2D-4847-42D8-8F90-BC9E14955266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A262A2D-4847-42D8-8F90-BC9E14955266}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A262A2D-4847-42D8-8F90-BC9E14955266}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

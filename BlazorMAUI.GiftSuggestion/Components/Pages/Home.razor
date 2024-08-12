@@ -1,0 +1,212 @@
+﻿@page "/"
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using Markdig
+@using OpenAI.Interfaces
+@using OpenAI.ObjectModels
+@using OpenAI.ObjectModels.RequestModels
+@inject IOpenAIService OpenAiService
+
+<PageTitle>Gift Suggestions</PageTitle>
+
+<div class="d-flex align-items-center justify-content-center min-vh-100 bg-success bg-opacity-25">
+    <div class="card w-100 max-w-lg shadow-lg bg-success bg-opacity-10 transition-transform transform scale-hover">
+        <div class="card-body animate__animated animate__fadeIn">
+            <h2 class="text-center text-success animate__animated animate__fadeInDown">Birthday Gift Suggestion App</h2>
+
+            <EditForm Model="formModel" OnValidSubmit="HandleFormSubmit" novalidate>
+                <DataAnnotationsValidator />
+
+                <div class="mb-3 d-flex flex-column align-items-center justify-content-center">
+                    <div class="w-100 max-w-xs">
+                        <label class="form-label text-success">Relationship</label>
+                        <InputSelect @bind-Value="formModel.Relationship" @oninput="HandleRelationshipChange"
+                                     class="form-select border-success text-success bg-light">
+                            <option disabled selected>Select a Relationship</option>
+                            @foreach (var relationship in Enum.GetValues<RelationshipType>())
+                            {
+                                <option value="@relationship">@relationship.ToString()</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="@(() => formModel.Relationship)" class="text-green-700" />
+                    </div>
+                </div>
+
+                <div class="mb-3 d-flex flex-column align-items-center justify-content-center">
+                    <div class="w-100 max-w-xs">
+                        <label class="form-label text-success">Gender</label>
+                        <InputRadioGroup Name="genderInputGroup" @bind-Value="formModel.Gender">
+                            <div class="form-check">
+                                @foreach (var gender in Enum.GetValues<Gender>())
+                                {
+                                    <label class="form-check-label text-success">
+                                        <InputRadio Name="genderInputGroup" class="form-check-input bg-light border-success" value="@gender" selected TValue="Gender" />
+                                        <span class="form-check-label m-3">@gender.ToString()</span>
+                                    </label>
+                                }
+                            </div>
+                        </InputRadioGroup>
+                        <ValidationMessage For="@(() => formModel.Gender)" class="text-green-700" />
+                    </div>
+                </div>
+
+                <div class="mb-3 d-flex flex-column align-items-center justify-content-center">
+                    <div class="w-100 max-w-xs">
+                        <label class="form-label text-success">Age</label>
+                        <InputNumber @bind-Value="formModel.Age" class="form-control border-success text-success bg-light" placeholder="Age" />
+                        <ValidationMessage For="@(() => formModel.Age)" class="text-green-700" />
+                    </div>
+                </div>
+
+                <div class="mb-3 d-flex flex-column align-items-center justify-content-center">
+                    <div class="w-100 max-w-xs">
+                        <label class="form-label text-success">Hobbies</label>
+                        <InputText @bind-Value="formModel.Hobbies" class="form-control border-success text-success bg-light" placeholder="Hobbies" />
+                        <ValidationMessage For="@(() => formModel.Hobbies)" class="text-green-700" />
+                    </div>
+                </div>
+
+                <div class="mb-3 d-flex flex-column align-items-center justify-content-center">
+                    <div class="w-100 max-w-xs">
+                        <label class="form-label text-success">Budget in $</label>
+                        <InputNumber @bind-Value="formModel.Budget" class="form-control border-success text-success bg-light" placeholder="Budget in $" />
+                        <ValidationMessage For="@(() => formModel.Budget)" class="text-green-700" />
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex flex-column align-items-center justify-content-center">
+                    <div class="w-100 max-w-xs">
+                        <button type="submit" class="btn btn-primary w-100 hover:scale-105 transition-transform" disabled="@isLoading">
+                            @if (isLoading)
+                            {
+                                <span class="spinner-border spinner-border-sm"></span>
+                            }
+                            Submit 🎁
+                        </button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@if (isLoading)
+{
+    <div class="position-fixed top-0 start-0 w-100 h-100 bg-black bg-opacity-50 d-flex align-items-center justify-content-center z-50">
+        <div class="bg-light p-4 rounded-lg shadow-lg">
+            <div class="d-flex flex-column align-items-center">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+                <p class="mt-4 fs-5 fw-semibold">Loading gift suggestions...</p>
+            </div>
+        </div>
+    </div>
+}
+
+@code
+{
+    [CascadingParameter] public IModalService Modal { get; set; }
+    private bool isLoading = false;
+    private FormModel formModel = new FormModel();
+
+    private async Task HandleFormSubmit()
+    {
+        if (isLoading) return; // Prevent multiple submissions
+        try
+        {
+            isLoading = true;
+
+            BuildThePrompt();
+
+            var completionResult = await OpenAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest
+                {
+                    Messages = new List<ChatMessage>
+                {
+                    ChatMessage.FromSystem(AssistantsPrompt),
+                    ChatMessage.FromUser(promptBuilder.ToString()),
+                },
+                    Model = Models.Gpt_4o,
+                });
+            if (completionResult.Successful)
+            {
+                var gptContent = completionResult.Choices.First().Message.Content;
+
+                var pipeline = new MarkdownPipelineBuilder().UseBootstrap().Build();
+
+                var htmlContent = Markdown.ToHtml(gptContent, pipeline);
+
+                var parameters = new ModalParameters()
+                    .Add("GeneratedHtml", htmlContent);
+
+                Modal.Show<GiftResultsModal>(parameters);
+
+                // Handle the successful result (e.g., display suggestions)
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            // Handle the error (e.g., show error message to user)
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void HandleRelationshipChange(ChangeEventArgs args)
+    {
+        if (args.Value is null)
+            return;
+
+        var relationship = Enum.Parse<RelationshipType>(args.Value.ToString());
+
+        if (relationship == RelationshipType.Sister)
+            formModel.Gender = Gender.Female;
+
+        if (relationship == RelationshipType.Brother)
+            formModel.Gender = Gender.Male;
+    }
+
+    private static StringBuilder promptBuilder = new();
+
+    private void BuildThePrompt()
+    {
+        promptBuilder.Clear();
+
+        promptBuilder.AppendLine(PromptIntroductionText);
+
+        promptBuilder.AppendLine($"<Relationship>{formModel.Relationship}</Relationship>");
+
+        promptBuilder.AppendLine($"<Gender>{formModel.Gender}</Gender>");
+
+        promptBuilder.AppendLine($"<Age>{formModel.Age}</Age>");
+
+        promptBuilder.AppendLine($"<Hobbies>{formModel.Hobbies}</Hobbies>");
+
+        promptBuilder.AppendLine($"<BudgetInDollars>{formModel.Budget}</BudgetInDollars>");
+    }
+
+    private const string AssistantsPrompt = "You're a world-class Birthday gift assistant for Turkish people. You know how to select the best gift for the person and make the person happy! Don't be so general. Be a little bit more specific when it comes to gifts. Don't include any extra explanations in your responses!";
+    private const string PromptIntroductionText = "Please list seven gift ideas with very short descriptions in Markdown format and add emojis to the beginning of each line that match the gift idea with the specifications below. If I like your suggestions, I'll tip you $5000 for your help.";
+
+    protected class FormModel
+    {
+        [Required]
+        [AllowedValues(RelationshipType.Friend, RelationshipType.Relative,
+            RelationshipType.Parent, RelationshipType.Brother, RelationshipType.Sister,
+            RelationshipType.Child, RelationshipType.Spouse, RelationshipType.Colleague, RelationshipType.Other)]
+        public RelationshipType Relationship { get; set; }
+
+        [Required, Range(1, 100)] public int Age { get; set; } = default;
+
+        [Required, AllowedValues(Gender.Female, Gender.Male)]
+        public Gender Gender { get; set; } = Gender.Female;
+
+        [Required, Range(1, 99999999)]
+        public double Budget { get; set; } = default;
+
+
+        [Required, MaxLength(150)]
+        public string Hobbies { get; set; } = string.Empty;
+    }
+}

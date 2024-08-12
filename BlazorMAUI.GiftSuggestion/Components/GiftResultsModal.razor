@@ -1,0 +1,28 @@
+﻿
+<div class="p-4 bg-light rounded-lg max-w-2xl mx-auto">
+    <h3 class="h3 text-dark text-center mb-4 position-relative">
+        <span class="position-relative z-10">Gift Suggestions</span>
+    </h3>
+
+    <div class="rounded p-4 bg-white">
+        @((MarkupString)GeneratedHtml)
+    </div>
+
+    <div class="mt-4 text-center">
+        <button @onclick="Close" class="btn btn-outline-primary px-4 py-2 rounded-pill shadow-sm hover-bg-secondary transition-transform transform hover:scale-105">
+            Close
+        </button>
+    </div>
+</div>
+
+
+@code {
+    [Parameter] public string GeneratedHtml { get; set; }
+
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    private async Task Close()
+    {
+        await BlazoredModal.CloseAsync();
+    }
+}
