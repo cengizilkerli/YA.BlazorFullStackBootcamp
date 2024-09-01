@@ -83,7 +83,6 @@ else
         var result = await DialogService
             .Confirm("Silmek istediginize emin misiniz?", "Secili Kayit Siliniyor", new ConfirmOptions() { OkButtonText = "Evet", CancelButtonText = "Hayir" });
 
-
         if (result is not null && (bool)result)
         {
             var response = await HttpClient.DeleteAsync($"Accounts/{account.Id}", cts.Token);
@@ -104,7 +103,5 @@ else
                 NotificationService.Notify(NotificationSeverity.Error, "Hata", "Kayit silinirken bir hata olustu.");
             }
         }
-
-
     }
 }

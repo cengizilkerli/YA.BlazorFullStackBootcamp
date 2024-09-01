@@ -1,25 +1,19 @@
-﻿using FluentValidation;
+﻿using ChatGPTClone.Application.Common.Localization;
+using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace ChatGPTClone.Application.Features.ChatSessions.Commands.Create;
 
 public class ChatSessionCreateCommandValidator : AbstractValidator<ChatSessionCreateCommand>
 {
-    public ChatSessionCreateCommandValidator()
+    public ChatSessionCreateCommandValidator(IStringLocalizer<CommonLocalization> localizer)
     {
         RuleFor(x => x.Model)
-            .NotNull()
-            .WithMessage("Model is required")
-            .NotEmpty()
-            .WithMessage("Model is required")
-            .IsInEnum()
-            .WithMessage("Model is invalid");
+            .NotEmpty().WithMessage(x => localizer[CommonLocalizationKeys.ValidationIsRequired, nameof(x.Model)])
+            .IsInEnum().WithMessage(x => localizer[CommonLocalizationKeys.ValidationIsInvalid, nameof(x.Model)]);
 
         RuleFor(x => x.Content)
-            .NotNull()
-            .WithMessage("Content is required")
-            .NotEmpty()
-            .WithMessage("Content is required")
-            .MaximumLength(4000)
-            .WithMessage("Content must not exceed 4000 characters.");
+            .NotEmpty().WithMessage(x => localizer[CommonLocalizationKeys.ValidationIsRequired, nameof(x.Content)])
+            .Length(5, 4000).WithMessage(x => localizer[CommonLocalizationKeys.ValidationMustBeBetween, nameof(x.Content), 5, 4000]);
     }
 }
